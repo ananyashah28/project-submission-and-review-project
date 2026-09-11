@@ -79,7 +79,17 @@ def get_settings() -> Settings:
     """
     Get cached settings instance
     """
-    return Settings()
+    s = Settings()
+    elastic_origins = [
+        "http://35.154.152.233",
+        "http://35.154.152.233:80",
+        "http://35.154.152.233:3000",
+        "http://35.154.152.233:8000",
+    ]
+    for origin in elastic_origins:
+        if origin not in s.ALLOWED_ORIGINS:
+            s.ALLOWED_ORIGINS.append(origin)
+    return s
 
 
 # Clear cache on module reload for development
