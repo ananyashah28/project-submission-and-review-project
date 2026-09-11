@@ -10,8 +10,8 @@ export {
   login,
   logout,
   getCurrentUser,
-  isAuthenticated,
-  getToken,
+  checkAuth,
+  refreshToken,
 } from "./authService";
 
 // Project Service
@@ -24,8 +24,11 @@ export {
   deleteProject,
   submitProject,
   reviewProject,
+  getProjectStats,
+  getProjectsForReview,
+  updateProjectStatus,
 } from "./projectService";
-export type { ProjectQueryParams, ProjectReviewData } from "./projectService";
+export type { ProjectQueryParams, ReviewRequest, ProjectStats, ProjectStatusUpdate } from "./projectService";
 
 // File Service
 export { default as fileService } from "./fileService";

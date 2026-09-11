@@ -37,7 +37,7 @@ export interface FileDeleteResponse {
  * Get all files for a project
  */
 export const getProjectFiles = async (projectId: string): Promise<ProjectFile[]> => {
-  return apiMethod<ProjectFile[]>(FILE_ENDPOINTS.PROJECT_FILES(projectId), "get", {}, true);
+  return apiMethod<ProjectFile[]>(FILE_ENDPOINTS.PROJECT_FILES(projectId), "get", {});
 };
 
 /**
@@ -99,14 +99,14 @@ export const uploadMultipleFiles = async (
  * Delete a file
  */
 export const deleteFile = async (fileId: string): Promise<FileDeleteResponse> => {
-  return apiMethod<FileDeleteResponse>(FILE_ENDPOINTS.FILE_BY_ID(fileId), "delete", {}, true);
+  return apiMethod<FileDeleteResponse>(FILE_ENDPOINTS.FILE_BY_ID(fileId), "delete", {});
 };
 
 /**
  * Get file download URL
  */
 export const getFileDownloadUrl = async (fileId: string): Promise<string> => {
-  const response = await apiMethod<{ url: string }>(FILE_ENDPOINTS.DOWNLOAD(fileId), "get", {}, true);
+  const response = await apiMethod<{ url: string }>(FILE_ENDPOINTS.DOWNLOAD(fileId), "get", {});
   return response.url;
 };
 
