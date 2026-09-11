@@ -29,28 +29,10 @@ phases:
     commands:
       - echo "Deploying to EC2 via SSM..."
       - |
-        # Fetch secrets for EC2 deployment
-        SECRETS=$(aws secretsmanager get-secret-value --secret-id dev/project-submission-and-review-portal --query SecretString --output text --region $AWS_REGION)
-        
         aws ssm send-command \
           --instance-ids "$EC2_INSTANCE_ID" \
           --document-name "AWS-RunShellScript" \
-          --parameters "commands=[
-            \"cd /home/ssm-user\",
-            \"sudo yum install -y docker git jq\",
-            \"sudo systemctl start docker\",
-            \"sudo systemctl enable docker\",
-            \"if [ -d app ]; then cd app && git pull origin dev; else git clone -b dev https://github.com/ananyashah28/project-submission-and-review-project.git app && cd app; fi\",
-            \"aws secretsmanager get-secret-value --secret-id dev/project-submission-and-review-portal --query SecretString --output text --region ap-south-1 > /tmp/secrets.json\",
-            \"API_URL=\\$(cat /tmp/secrets.json | jq -r .NEXT_PUBLIC_API_URL)\",
-            \"rm /tmp/secrets.json\",
-            \"sudo docker build --build-arg NEXT_PUBLIC_API_URL=\\$API_URL -t project-portal:latest .\",
-            \"sudo docker stop project-portal || true\",
-            \"sudo docker rm project-portal || true\",
-            \"sudo docker run -d --name project-portal --restart unless-stopped -p 80:3000 -p 8000:8000 project-portal:latest\",
-            \"sudo docker ps\",
-            \"echo Deployment completed at \\$(date)\"
-          ]" \
+          --parameters commands='["cd /home/ssm-user","sudo yum install -y docker git jq","sudo systemctl start docker","sudo systemctl enable docker","if [ -d app ]; then cd app && git pull origin dev; else git clone -b dev https://github.com/ananyashah28/project-submission-and-review-project.git app && cd app; fi","export API_URL='"${NEXT_PUBLIC_API_URL}"'","sudo docker build --build-arg NEXT_PUBLIC_API_URL=$API_URL -t project-portal:latest .","sudo docker stop project-portal || true","sudo docker rm project-portal || true","sudo docker run -d --name project-portal --restart unless-stopped -p 80:3000 -p 8000:8000 project-portal:latest","sudo docker ps","echo Deployment completed"]' \
           --region "$AWS_REGION" \
           --output text
       - echo "SSM command sent successfully!"
