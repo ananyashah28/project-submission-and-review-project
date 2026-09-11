@@ -22,9 +22,8 @@ phases:
 
   build:
     commands:
-      - echo "Building Docker image..."
-      - docker build --build-arg NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL} -t project-portal:latest .
-      - echo "Docker build completed!"
+      - echo "Skipping Docker build in CodeBuild - will build on EC2"
+      - echo "NEXT_PUBLIC_API_URL is set from Secrets Manager"
 
   post_build:
     commands:
