@@ -2,6 +2,7 @@
 Application configuration using Pydantic Settings
 """
 from pydantic_settings import BaseSettings
+from pydantic import field_validator
 from functools import lru_cache
 from typing import List
 
@@ -46,6 +47,18 @@ class Settings(BaseSettings):
         "http://35.154.152.233:3000",
         "http://35.154.152.233:8000",
     ]
+
+    @field_validator("ALLOWED_ORIGINS", mode="before")
+    def parse_allowed_origins(cls, v):
+        if isinstance(v, str):
+            if v.startswith("[") and v.endswith("]"):
+                import json
+                try:
+                    return json.loads(v)
+                except Exception:
+                    pass
+            return [origin.strip() for origin in v.split(",") if origin.strip()]
+        return v
     
     # AWS S3
     AWS_ACCESS_KEY_ID: str = ""
