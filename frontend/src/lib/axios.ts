@@ -5,18 +5,45 @@
 import axios, { AxiosInstance, AxiosError } from "axios";
 import { ApiError } from "@/types";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const getApiBaseUrl = (): string => {
+  const envUrl = process.env.NEXT_PUBLIC_API_URL;
+
+  if (typeof window !== "undefined") {
+    const currentHost = window.location.hostname;
+
+    // Ignore legacy dead IP 13.235.71.134 if present
+    if (envUrl && !envUrl.includes("13.235.71.134") && envUrl.includes(currentHost)) {
+      return envUrl;
+    }
+
+    // Dynamically resolve to current page IP/domain on port 8000
+    return `http://${currentHost}:8000`;
+  }
+
+  if (envUrl && !envUrl.includes("13.235.71.134")) {
+    return envUrl;
+  }
+  return "http://35.154.152.233:8000";
+};
 
 /**
  * Create axios instance with credentials support for httpOnly cookies
  */
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: getApiBaseUrl(),
   headers: {
     "Content-Type": "application/json",
   },
   withCredentials: true, // Essential for sending/receiving httpOnly cookies
   timeout: 30000,
+});
+
+/**
+ * Request interceptor - Dynamically set target API URL in browser
+ */
+axiosInstance.interceptors.request.use((config) => {
+  config.baseURL = getApiBaseUrl();
+  return config;
 });
 
 /**

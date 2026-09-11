@@ -3,11 +3,11 @@
 # Suitable for simple single-container deployment
 
 # Build argument for API URL (passed during docker build)
-ARG NEXT_PUBLIC_API_URL=http://localhost:8000
+ARG NEXT_PUBLIC_API_URL=http://35.154.152.233:8000
 
 FROM node:18-alpine AS frontend-builder
 
-ARG NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_API_URL=http://35.154.152.233:8000
 
 WORKDIR /app/frontend
 COPY frontend/package*.json ./
