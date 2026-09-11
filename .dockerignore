@@ -1,0 +1,51 @@
+# Root .dockerignore
+
+# Git
+.git/
+.gitignore
+
+# Dependencies (installed fresh in Docker)
+frontend/node_modules/
+backend/venv/
+backend/.venv/
+
+# Build outputs
+frontend/.next/
+frontend/out/
+
+# Environment files
+.env
+.env.*
+!.env.example
+!.env.docker.example
+backend/.env
+frontend/.env.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Documentation
+*.md
+docs/
+Docs/
+
+# Testing
+**/__pycache__/
+**/*.pyc
+.pytest_cache/
+coverage/
+.nyc_output/
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker files (not needed inside container)
+docker-compose.yml
+buildspec*.yml

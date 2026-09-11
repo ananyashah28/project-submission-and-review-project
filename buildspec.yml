@@ -1,0 +1,90 @@
+# AWS CodeBuild Buildspec for Project Submission & Review Portal
+# Builds Docker images and pushes to ECR, then deploys to EC2
+
+version: 0.2
+
+env:
+  variables:
+    AWS_REGION: "ap-south-1"
+    ECR_REPO_BACKEND: "project-portal-backend"
+    ECR_REPO_FRONTEND: "project-portal-frontend"
+  parameter-store:
+    DOCKER_USERNAME: "/project-portal/docker-username"
+    DOCKER_PASSWORD: "/project-portal/docker-password"
+  secrets-manager:
+    EC2_SSH_KEY: "project-portal/ec2-ssh-key"
+
+phases:
+  pre_build:
+    commands:
+      - echo "Logging in to Amazon ECR..."
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:-latest}
+      - echo "Image tag = $IMAGE_TAG"
+
+  build:
+    commands:
+      - echo "Building Docker images..."
+      
+      # Build backend image
+      - echo "Building backend image..."
+      - docker build -t $ECR_REPO_BACKEND:$IMAGE_TAG -t $ECR_REPO_BACKEND:latest ./backend
+      
+      # Build frontend image
+      - echo "Building frontend image..."
+      - docker build -t $ECR_REPO_FRONTEND:$IMAGE_TAG -t $ECR_REPO_FRONTEND:latest ./frontend
+
+  post_build:
+    commands:
+      - echo "Pushing Docker images to ECR..."
+      
+      # Tag and push backend
+      - docker tag $ECR_REPO_BACKEND:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_BACKEND:$IMAGE_TAG
+      - docker tag $ECR_REPO_BACKEND:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_BACKEND:latest
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_BACKEND:$IMAGE_TAG
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_BACKEND:latest
+      
+      # Tag and push frontend
+      - docker tag $ECR_REPO_FRONTEND:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_FRONTEND:$IMAGE_TAG
+      - docker tag $ECR_REPO_FRONTEND:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_FRONTEND:latest
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_FRONTEND:$IMAGE_TAG
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_FRONTEND:latest
+      
+      - echo "Images pushed successfully!"
+      
+      # Deploy to EC2 using SSM
+      - echo "Deploying to EC2..."
+      - |
+        aws ssm send-command \
+          --instance-ids "$EC2_INSTANCE_ID" \
+          --document-name "AWS-RunShellScript" \
+          --parameters 'commands=[
+            "cd /home/ubuntu/app",
+            "aws ecr get-login-password --region '"$AWS_REGION"' | docker login --username AWS --password-stdin '"$AWS_ACCOUNT_ID"'.dkr.ecr.'"$AWS_REGION"'.amazonaws.com",
+            "docker-compose pull",
+            "docker-compose up -d --force-recreate",
+            "docker system prune -f"
+          ]' \
+          --region $AWS_REGION
+      
+      - echo "Deployment complete!"
+
+  # Optional: Run tests before build
+  # install:
+  #   commands:
+  #     - echo "Installing test dependencies..."
+  #     - cd backend && pip install -r requirements.txt && pytest
+  #     - cd ../frontend && npm ci && npm run lint
+
+artifacts:
+  files:
+    - docker-compose.yml
+    - nginx/nginx.conf
+    - appspec.yml
+  discard-paths: no
+
+cache:
+  paths:
+    - '/root/.cache/pip/**/*'
+    - '/root/.npm/**/*'

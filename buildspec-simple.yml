@@ -1,0 +1,69 @@
+# AWS CodeBuild Buildspec - Simple Version
+# Builds and deploys directly to EC2 without ECR
+# Use this if you don't want to use ECR
+
+version: 0.2
+
+env:
+  variables:
+    AWS_REGION: "ap-south-1"
+  parameter-store:
+    EC2_INSTANCE_ID: "/project-portal/ec2-instance-id"
+    EC2_HOST: "/project-portal/ec2-host"
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+      nodejs: 18
+    commands:
+      - echo "Installing dependencies..."
+
+  pre_build:
+    commands:
+      - echo "Running pre-build checks..."
+      - cd backend && pip install -r requirements.txt
+      - cd ../frontend && npm ci
+      
+      # Optional: Run linting
+      - cd ../frontend && npm run lint || true
+
+  build:
+    commands:
+      - echo "Building frontend..."
+      - cd frontend && npm run build
+      - echo "Build completed successfully!"
+
+  post_build:
+    commands:
+      - echo "Deploying to EC2 via SSM..."
+      - |
+        aws ssm send-command \
+          --instance-ids "$EC2_INSTANCE_ID" \
+          --document-name "AWS-RunShellScript" \
+          --parameters 'commands=[
+            "cd /home/ubuntu/app",
+            "git pull origin main",
+            "cd backend && source venv/bin/activate && pip install -r requirements.txt",
+            "cd ../frontend && npm ci && npm run build",
+            "sudo systemctl restart project-backend",
+            "sudo systemctl restart project-frontend",
+            "echo Deployment completed at $(date)"
+          ]' \
+          --region $AWS_REGION \
+          --output text
+      
+      - echo "Deployment triggered!"
+
+artifacts:
+  files:
+    - '**/*'
+  exclude-paths:
+    - 'node_modules/**/*'
+    - 'backend/venv/**/*'
+    - '.git/**/*'
+
+cache:
+  paths:
+    - 'backend/venv/**/*'
+    - 'frontend/node_modules/**/*'
