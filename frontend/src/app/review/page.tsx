@@ -205,7 +205,7 @@ function ReviewDashboardContent() {
                         {/* Submission Comment */}
                         {project.submission_comment && (
                           <div className="mt-3 p-2 bg-blue-50 border border-blue-100 rounded-md">
-                            <p className="text-xs font-medium text-blue-700 mb-1">Author's Note:</p>
+                            <p className="text-xs font-medium text-blue-700 mb-1">Author&apos;s Note:</p>
                             <p className="text-sm text-blue-800">{project.submission_comment}</p>
                           </div>
                         )}

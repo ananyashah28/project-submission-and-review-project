@@ -43,21 +43,21 @@ function ProjectsContent() {
     projectTitle: "",
   });
 
-  const fetchProjects = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const params = statusFilter ? { status: statusFilter as ProjectStatus } : {};
-      const data = await projectService.getProjects(params);
-      setProjects(data);
-    } catch (err: any) {
-      setError(err.message || "Failed to load projects");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchProjects = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const params = statusFilter ? { status: statusFilter as ProjectStatus } : {};
+        const data = await projectService.getProjects(params);
+        setProjects(data);
+      } catch (err: any) {
+        setError(err.message || "Failed to load projects");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     fetchProjects();
   }, [statusFilter]);
 
