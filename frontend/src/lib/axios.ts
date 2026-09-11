@@ -16,8 +16,8 @@ const getApiBaseUrl = (): string => {
       return envUrl;
     }
 
-    // Dynamically resolve to current page IP/domain on port 8000
-    return `http://${currentHost}:8000`;
+    // Dynamically resolve to current page protocol and host on port 8000
+    return `${window.location.protocol}//${currentHost}:8000`;
   }
 
   if (envUrl && !envUrl.includes("13.235.71.134")) {
