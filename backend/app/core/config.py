@@ -63,8 +63,8 @@ class Settings(BaseSettings):
     # AWS S3
     AWS_ACCESS_KEY_ID: str = ""
     AWS_SECRET_ACCESS_KEY: str = ""
-    AWS_S3_BUCKET: str = ""
-    AWS_REGION: str = "us-east-1"
+    AWS_S3_BUCKET: str = "project-submission-and-review-portal-416684166855-ap-south-1-an"
+    AWS_REGION: str = "ap-south-1"
     
     # File Upload
     MAX_FILE_SIZE: int = 52428800  # 50 MB in bytes
