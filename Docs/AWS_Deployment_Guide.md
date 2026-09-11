@@ -1744,6 +1744,62 @@ aws ssm send-command \
 
 ---
 
+## Real-World Challenges Faced & Solutions Applied
+
+During the development and deployment of the **Project Submission & Review Portal**, several critical infrastructure, git, and deployment challenges were encountered and successfully resolved:
+
+### Challenge 1: Windows Filesystem Incompatibility (`Zone.Identifier` & Colons in Git Paths)
+* **Issue**: `git clone` exited with `error: invalid path 'Docs/...:Zone.Identifier'` and `fatal: unable to checkout working tree`.
+* **Root Cause**: NTFS and FAT filesystems on Windows strictly forbid colons (`:`) and alternate data stream specifiers in file paths.
+* **Solution**:
+  1. Disabled strict NTFS path validation in Git: `git config core.protectNTFS false`
+  2. Enabled sparse checkout (`git config core.sparseCheckout true`) and created a clean UTF-8 rule in `.git/info/sparse-checkout`:
+     ```
+     /*
+     !*:*
+     !*Zone.Identifier*
+     ```
+  3. Ran `git restore --staged .` to align the Git index with the filesystem, resulting in 100% clean checkout of all project files.
+
+---
+
+### Challenge 2: Dynamic EC2 Public IP Changes & `Network Error` on `/auth/login`
+* **Issue**: Restarting the EC2 instance changed its public IP address, causing login requests to fail with a `Network Error`.
+* **Root Cause**: Default AWS EC2 public IPv4 addresses are dynamic and change on every stop/start cycle. Next.js bakes `NEXT_PUBLIC_` environment variables into the static JavaScript bundle at **build time**, causing the client browser to attempt requests to the old server IP.
+* **Solution**:
+  1. Allocated an **AWS Elastic IP** (**`35.154.152.233`**) in the AWS EC2 Console.
+  2. Associated the Elastic IP directly with the EC2 instance, providing a permanent static IP address that survives server restarts.
+
+---
+
+### Challenge 3: Stale API URLs in AWS Secrets Manager & CI/CD Pipeline
+* **Issue**: AWS CodeBuild deployments kept building the Next.js frontend targeting an outdated server IP (`http://13.235.71.134:8000`).
+* **Root Cause**: AWS Secrets Manager stored `NEXT_PUBLIC_API_URL` and `ALLOWED_ORIGINS` containing the old IP address.
+* **Solution**:
+  1. Updated the secret values in **AWS Secrets Manager**:
+     * `NEXT_PUBLIC_API_URL` $\rightarrow$ `http://35.154.152.233:8000`
+     * `ALLOWED_ORIGINS` $\rightarrow$ `http://35.154.152.233,http://35.154.152.233:8000,http://localhost:3000`
+  2. Re-triggered the AWS CodeBuild pipeline so Next.js compiled with the correct static Elastic IP.
+
+---
+
+### Challenge 4: CORS Whitelist Rejections
+* **Issue**: Frontend API requests were rejected by FastAPI with Cross-Origin Resource Sharing (CORS) errors.
+* **Root Cause**: `ALLOWED_ORIGINS` in `backend/app/core/config.py` contained hardcoded legacy IP addresses.
+* **Solution**: Cleaned up `ALLOWED_ORIGINS` in `backend/app/core/config.py` to strictly whitelist `localhost` (for local development) and the static Elastic IP `http://35.154.152.233` (along with ports `80`, `3000`, and `8000`).
+
+---
+
+### Challenge 5: Local Database Port Collision & Visual DB Management
+* **Issue**: Local `docker compose up -d db` failed with `Bind for 0.0.0.0:5432 failed: port is already allocated`.
+* **Root Cause**: A native PostgreSQL service or background process was already occupying host port `5432`.
+* **Solution**:
+  1. Remapped the PostgreSQL host port in `docker-compose.yml` to `"5433:5432"`.
+  2. Updated `backend/.env` `DATABASE_URL` to `postgresql://postgres:postgres@localhost:5433/project_portal`.
+  3. Added **Adminer** (Visual Web Database Interface) on port `8080` in `docker-compose.yml` to allow visual database inspection at `http://localhost:8080`.
+
+---
+
 ## Glossary
 
 | Term | Definition |
@@ -1781,3 +1837,4 @@ aws ssm send-command \
 *This guide was created during the deployment of the Project Submission & Review Portal to AWS EC2. It covers both the infrastructure setup and the application architecture patterns used.*
 
 *Last updated: September 11, 2026*
+
