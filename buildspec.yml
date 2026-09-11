@@ -24,18 +24,16 @@ phases:
           --instance-ids "$EC2_INSTANCE_ID" \
           --document-name "AWS-RunShellScript" \
           --parameters 'commands=[
-            "cd /home/ubuntu",
-            "sudo yum update -y || sudo apt-get update -y",
-            "sudo yum install -y docker git || sudo apt-get install -y docker.io git",
-            "sudo systemctl start docker || sudo service docker start",
-            "sudo usermod -aG docker ubuntu || true",
-            "rm -rf app",
-            "git clone -b dev https://github.com/ananyashah28/project-submission-and-review-project.git app",
-            "cd app",
+            "cd /home/ssm-user",
+            "sudo yum install -y docker git",
+            "sudo systemctl start docker",
+            "sudo systemctl enable docker",
+            "if [ -d app ]; then cd app && git pull origin dev; else git clone -b dev https://github.com/ananyashah28/project-submission-and-review-project.git app && cd app; fi",
             "sudo docker build -t project-portal:latest .",
             "sudo docker stop project-portal || true",
             "sudo docker rm project-portal || true",
-            "sudo docker run -d --name project-portal -p 80:3000 -p 8000:8000 project-portal:latest",
+            "sudo docker run -d --name project-portal --restart unless-stopped -p 80:3000 -p 8000:8000 project-portal:latest",
+            "sudo docker ps",
             "echo Deployment completed at $(date)"
           ]' \
           --region "$AWS_REGION" \
