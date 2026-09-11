@@ -29,13 +29,19 @@ phases:
     commands:
       - echo "Deploying to EC2 via SSM..."
       - |
-        aws ssm send-command \
+        COMMAND_ID=$(aws ssm send-command \
           --instance-ids "$EC2_INSTANCE_ID" \
           --document-name "AWS-RunShellScript" \
-          --parameters commands='["cd /home/ssm-user","sudo yum install -y docker git jq","sudo systemctl start docker","sudo systemctl enable docker","if [ -d app ]; then cd app && git pull origin dev; else git clone -b dev https://github.com/ananyashah28/project-submission-and-review-project.git app && cd app; fi","export API_URL='"${NEXT_PUBLIC_API_URL}"'","sudo docker build --build-arg NEXT_PUBLIC_API_URL=$API_URL -t project-portal:latest .","sudo docker stop project-portal || true","sudo docker rm project-portal || true","sudo docker run -d --name project-portal --restart unless-stopped -p 80:3000 -p 8000:8000 project-portal:latest","sudo docker ps","echo Deployment completed"]' \
+          --parameters commands='["cd /home/ssm-user","sudo yum install -y docker git","sudo systemctl start docker","sudo systemctl enable docker","if [ -d app ]; then cd app && git pull origin dev; else git clone -b dev https://github.com/ananyashah28/project-submission-and-review-project.git app && cd app; fi","sudo docker build --build-arg NEXT_PUBLIC_API_URL='"${NEXT_PUBLIC_API_URL}"' -t project-portal:latest .","sudo docker stop project-portal || true","sudo docker rm project-portal || true","sudo docker run -d --name project-portal --restart unless-stopped -p 80:3000 -p 8000:8000 project-portal:latest","sudo docker ps","echo Deployment completed"]' \
           --region "$AWS_REGION" \
-          --output text
-      - echo "SSM command sent successfully!"
+          --query "Command.CommandId" \
+          --output text)
+        echo "SSM Command ID: $COMMAND_ID"
+        echo "Waiting for deployment to complete..."
+        aws ssm wait command-executed --command-id "$COMMAND_ID" --instance-id "$EC2_INSTANCE_ID" --region "$AWS_REGION"
+        echo "Deployment finished! Checking status..."
+        aws ssm get-command-invocation --command-id "$COMMAND_ID" --instance-id "$EC2_INSTANCE_ID" --region "$AWS_REGION" --query "Status" --output text
+      - echo "SSM command completed!"
 
 artifacts:
   files:
