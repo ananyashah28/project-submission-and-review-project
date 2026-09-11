@@ -6,11 +6,11 @@ version: 0.2
 
 env:
   secrets-manager:
-    NEXT_PUBLIC_API_URL: project-portal/production:NEXT_PUBLIC_API_URL
-    ALLOWED_ORIGINS: project-portal/production:ALLOWED_ORIGINS
-    SECRET_KEY: project-portal/production:SECRET_KEY
-    ALGORITHM: project-portal/production:ALGORITHM
-    ACCESS_TOKEN_EXPIRE_MINUTES: project-portal/production:ACCESS_TOKEN_EXPIRE_MINUTES
+    NEXT_PUBLIC_API_URL: dev/project-submission-and-review-portal:NEXT_PUBLIC_API_URL
+    ALLOWED_ORIGINS: dev/project-submission-and-review-portal:ALLOWED_ORIGINS
+    SECRET_KEY: dev/project-submission-and-review-portal:SECRET_KEY
+    ALGORITHM: dev/project-submission-and-review-portal:ALGORITHM
+    ACCESS_TOKEN_EXPIRE_MINUTES: dev/project-submission-and-review-portal:ACCESS_TOKEN_EXPIRE_MINUTES
 
 phases:
   pre_build:
@@ -40,7 +40,7 @@ phases:
       - echo "Deploying to EC2 via SSM..."
       - |
         # Fetch secrets for EC2 deployment
-        SECRETS=$(aws secretsmanager get-secret-value --secret-id project-portal/production --query SecretString --output text --region $AWS_REGION)
+        SECRETS=$(aws secretsmanager get-secret-value --secret-id dev/project-submission-and-review-portal --query SecretString --output text --region $AWS_REGION)
         
         aws ssm send-command \
           --instance-ids "$EC2_INSTANCE_ID" \
@@ -51,7 +51,7 @@ phases:
             \"sudo systemctl start docker\",
             \"sudo systemctl enable docker\",
             \"if [ -d app ]; then cd app && git pull origin dev; else git clone -b dev https://github.com/ananyashah28/project-submission-and-review-project.git app && cd app; fi\",
-            \"aws secretsmanager get-secret-value --secret-id project-portal/production --query SecretString --output text --region ap-south-1 > /tmp/secrets.json\",
+            \"aws secretsmanager get-secret-value --secret-id dev/project-submission-and-review-portal --query SecretString --output text --region ap-south-1 > /tmp/secrets.json\",
             \"echo NEXT_PUBLIC_API_URL=\\$(cat /tmp/secrets.json | jq -r .NEXT_PUBLIC_API_URL) > .env.production\",
             \"echo ALLOWED_ORIGINS=\\$(cat /tmp/secrets.json | jq -r .ALLOWED_ORIGINS) >> .env.production\",
             \"echo SECRET_KEY=\\$(cat /tmp/secrets.json | jq -r .SECRET_KEY) >> .env.production\",
