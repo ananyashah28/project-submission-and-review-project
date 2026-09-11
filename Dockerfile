@@ -2,16 +2,20 @@
 # Builds both backend and frontend in a single image
 # Suitable for simple single-container deployment
 
+# Build argument for API URL (passed during docker build)
+ARG NEXT_PUBLIC_API_URL=http://localhost:8000
+
 FROM node:18-alpine AS frontend-builder
+
+ARG NEXT_PUBLIC_API_URL
 
 WORKDIR /app/frontend
 COPY frontend/package*.json ./
 RUN npm ci
 COPY frontend/ ./
 
-# Copy root env file for build-time variables (NEXT_PUBLIC_*)
-COPY .env.production .env.local
-
+# Set build-time environment variable for Next.js
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
@@ -35,9 +39,6 @@ RUN pip install --no-cache-dir -r backend/requirements.txt
 
 # Copy backend code
 COPY backend/ ./backend/
-
-# Copy root env file for backend runtime
-COPY .env.production ./backend/.env
 
 # Copy frontend build
 COPY --from=frontend-builder /app/frontend/.next ./frontend/.next

@@ -22,17 +22,8 @@ phases:
 
   build:
     commands:
-      - echo "Creating .env.production file..."
-      - |
-        cat > .env.production << EOF
-        NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-        ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
-        SECRET_KEY=${SECRET_KEY}
-        ALGORITHM=${ALGORITHM}
-        ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES}
-        EOF
       - echo "Building Docker image..."
-      - docker build -t project-portal:latest .
+      - docker build --build-arg NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL} -t project-portal:latest .
       - echo "Docker build completed!"
 
   post_build:
@@ -52,13 +43,9 @@ phases:
             \"sudo systemctl enable docker\",
             \"if [ -d app ]; then cd app && git pull origin dev; else git clone -b dev https://github.com/ananyashah28/project-submission-and-review-project.git app && cd app; fi\",
             \"aws secretsmanager get-secret-value --secret-id dev/project-submission-and-review-portal --query SecretString --output text --region ap-south-1 > /tmp/secrets.json\",
-            \"echo NEXT_PUBLIC_API_URL=\\$(cat /tmp/secrets.json | jq -r .NEXT_PUBLIC_API_URL) > .env.production\",
-            \"echo ALLOWED_ORIGINS=\\$(cat /tmp/secrets.json | jq -r .ALLOWED_ORIGINS) >> .env.production\",
-            \"echo SECRET_KEY=\\$(cat /tmp/secrets.json | jq -r .SECRET_KEY) >> .env.production\",
-            \"echo ALGORITHM=\\$(cat /tmp/secrets.json | jq -r .ALGORITHM) >> .env.production\",
-            \"echo ACCESS_TOKEN_EXPIRE_MINUTES=\\$(cat /tmp/secrets.json | jq -r .ACCESS_TOKEN_EXPIRE_MINUTES) >> .env.production\",
+            \"API_URL=\\$(cat /tmp/secrets.json | jq -r .NEXT_PUBLIC_API_URL)\",
             \"rm /tmp/secrets.json\",
-            \"sudo docker build -t project-portal:latest .\",
+            \"sudo docker build --build-arg NEXT_PUBLIC_API_URL=\\$API_URL -t project-portal:latest .\",
             \"sudo docker stop project-portal || true\",
             \"sudo docker rm project-portal || true\",
             \"sudo docker run -d --name project-portal --restart unless-stopped -p 80:3000 -p 8000:8000 project-portal:latest\",
