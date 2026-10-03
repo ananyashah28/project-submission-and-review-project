@@ -38,9 +38,11 @@ def upgrade() -> None:
     op.execute("""
     DO $$
     BEGIN
-        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='tasks' AND column_name='assignee_id') THEN
-            ALTER TABLE tasks ADD COLUMN assignee_id UUID REFERENCES users(id) ON DELETE SET NULL;
-            CREATE INDEX IF NOT EXISTS ix_tasks_assignee_id ON tasks(assignee_id);
+        IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name='tasks') THEN
+            IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='tasks' AND column_name='assignee_id') THEN
+                ALTER TABLE tasks ADD COLUMN assignee_id UUID REFERENCES users(id) ON DELETE SET NULL;
+                CREATE INDEX IF NOT EXISTS ix_tasks_assignee_id ON tasks(assignee_id);
+            END IF;
         END IF;
     END $$;
     """)
@@ -49,12 +51,14 @@ def upgrade() -> None:
     op.execute("""
     DO $$
     BEGIN
-        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='bugs' AND column_name='assigned_to') THEN
-            ALTER TABLE bugs ADD COLUMN assigned_to VARCHAR(150);
-        END IF;
-        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='bugs' AND column_name='assignee_id') THEN
-            ALTER TABLE bugs ADD COLUMN assignee_id UUID REFERENCES users(id) ON DELETE SET NULL;
-            CREATE INDEX IF NOT EXISTS ix_bugs_assignee_id ON bugs(assignee_id);
+        IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name='bugs') THEN
+            IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='bugs' AND column_name='assigned_to') THEN
+                ALTER TABLE bugs ADD COLUMN assigned_to VARCHAR(150);
+            END IF;
+            IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='bugs' AND column_name='assignee_id') THEN
+                ALTER TABLE bugs ADD COLUMN assignee_id UUID REFERENCES users(id) ON DELETE SET NULL;
+                CREATE INDEX IF NOT EXISTS ix_bugs_assignee_id ON bugs(assignee_id);
+            END IF;
         END IF;
     END $$;
     """)
