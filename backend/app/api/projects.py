@@ -30,8 +30,11 @@ from app.services.project_service import project_service
 router = APIRouter()
 
 
-def project_to_response(project) -> dict:
+def project_to_response(project, current_user: Optional[User] = None) -> dict:
     """Convert project model to response with computed fields."""
+    member_ids = [m.user_id for m in (project.members or [])]
+    members_count = len(member_ids) + (0 if project.user_id in member_ids else 1)
+    is_owner = (current_user.id == project.user_id) if current_user else True
     return {
         "id": project.id,
         "user_id": project.user_id,
@@ -50,6 +53,9 @@ def project_to_response(project) -> dict:
         "updated_at": project.updated_at,
         "can_edit": project.can_edit(),
         "can_submit": project.can_submit(),
+        "member_ids": member_ids,
+        "members_count": members_count,
+        "is_owner": is_owner,
     }
 
 
@@ -71,7 +77,7 @@ async def create_project(
         Created project
     """
     project = project_service.create_project(db, project_data, current_user)
-    return project_to_response(project)
+    return project_to_response(project, current_user)
 
 
 @router.get("", response_model=List[ProjectListResponse])
@@ -98,7 +104,24 @@ async def list_projects(
     projects = project_service.get_user_projects(
         db, current_user, status_filter, skip, limit
     )
-    return projects
+    result = []
+    for p in projects:
+        member_ids = [m.user_id for m in (p.members or [])]
+        members_count = len(member_ids) + (0 if p.user_id in member_ids else 1)
+        result.append(
+            ProjectListResponse(
+                id=p.id,
+                title=p.title,
+                description=p.description,
+                category=p.category,
+                status=p.status,
+                created_at=p.created_at,
+                updated_at=p.updated_at,
+                members_count=members_count,
+                is_owner=(current_user.id == p.user_id)
+            )
+        )
+    return result
 
 
 @router.get("/review/pending", response_model=List[ProjectListResponse])
@@ -170,7 +193,7 @@ async def get_project(
     project = project_service.get_project_with_owner_check(
         db, project_id, current_user
     )
-    return project_to_response(project)
+    return project_to_response(project, current_user)
 
 
 @router.put("/{project_id}", response_model=ProjectResponse)
@@ -209,7 +232,7 @@ async def update_project(
         )
     
     updated_project = project_service.update_project(db, project, project_data)
-    return project_to_response(updated_project)
+    return project_to_response(updated_project, current_user)
 
 
 @router.post("/{project_id}/submit", response_model=ProjectSubmitResponse)

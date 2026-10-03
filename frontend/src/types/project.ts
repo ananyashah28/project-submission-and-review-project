@@ -28,6 +28,9 @@ export interface Project {
   can_edit: boolean;
   can_submit: boolean;
   files?: ProjectFile[];
+  member_ids?: string[];
+  members_count?: number;
+  is_owner?: boolean;
 }
 
 export interface ProjectCreate {
@@ -37,6 +40,7 @@ export interface ProjectCreate {
   technologies?: string[];
   github_url?: string;
   demo_url?: string;
+  member_ids?: string[];
 }
 
 export interface ProjectUpdate extends Partial<ProjectCreate> {}

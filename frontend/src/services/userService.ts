@@ -50,10 +50,19 @@ export const changePassword = async (data: PasswordChangeData): Promise<void> =>
   return apiMethod<void>(USER_ENDPOINTS.CHANGE_PASSWORD, "put", data);
 };
 
+/**
+ * List / search users to collaborate with or add to project
+ */
+export const searchUsers = async (query?: string): Promise<User[]> => {
+  const q = query ? `?query=${encodeURIComponent(query)}` : "";
+  return apiMethod<User[]>(`/users${q}`, "get");
+};
+
 const userService = {
   getProfile,
   updateProfile,
   changePassword,
+  searchUsers,
 };
 
 export default userService;

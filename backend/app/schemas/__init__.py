@@ -37,6 +37,53 @@ from app.schemas.token import (
     TokenPayload,
 )
 
+# Task and Subtask schemas
+from app.schemas.task import (
+    TaskBase,
+    TaskCreate,
+    TaskUpdate,
+    TaskResponse,
+    TaskDetailResponse,
+    TaskListResponse,
+    SubtaskBase,
+    SubtaskCreate,
+    SubtaskUpdate,
+    SubtaskResponse,
+)
+
+# Bug schemas
+from app.schemas.bug import (
+    BugBase,
+    BugCreate,
+    BugUpdate,
+    BugResponse,
+    BugListResponse,
+)
+
+# Milestone schemas
+from app.schemas.milestone import (
+    MilestoneBase,
+    MilestoneCreate,
+    MilestoneUpdate,
+    MilestoneResponse,
+    MilestoneListResponse,
+)
+
+# TimeLog schemas
+from app.schemas.timelog import (
+    TimeLogBase,
+    TimeLogCreate,
+    TimeLogUpdate,
+    TimeLogResponse,
+    TimeLogListResponse,
+)
+
+# ActivityLog schemas
+from app.schemas.activity import (
+    ActivityLogResponse,
+    ActivityLogListResponse,
+)
+
 __all__ = [
     # User
     "UserBase",
@@ -62,4 +109,36 @@ __all__ = [
     "Token",
     "TokenData",
     "TokenPayload",
+    # Tasks
+    "TaskBase",
+    "TaskCreate",
+    "TaskUpdate",
+    "TaskResponse",
+    "TaskDetailResponse",
+    "TaskListResponse",
+    "SubtaskBase",
+    "SubtaskCreate",
+    "SubtaskUpdate",
+    "SubtaskResponse",
+    # Bugs
+    "BugBase",
+    "BugCreate",
+    "BugUpdate",
+    "BugResponse",
+    "BugListResponse",
+    # Milestones
+    "MilestoneBase",
+    "MilestoneCreate",
+    "MilestoneUpdate",
+    "MilestoneResponse",
+    "MilestoneListResponse",
+    # TimeLog
+    "TimeLogBase",
+    "TimeLogCreate",
+    "TimeLogUpdate",
+    "TimeLogResponse",
+    "TimeLogListResponse",
+    # Activity
+    "ActivityLogResponse",
+    "ActivityLogListResponse",
 ]
