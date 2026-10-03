@@ -498,14 +498,19 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
                               )}
                             </div>
 
-                            {/* Assignee Avatar */}
-                            <div className="flex items-center gap-1.5">
+                            {/* Assignee Pill Badge */}
+                            <div className="flex items-center shrink-0">
                               {task.assigned_to ? (
                                 <div
-                                  className="w-6.5 h-6.5 rounded-full bg-slate-800 text-white text-xs font-bold flex items-center justify-center border border-white shadow-2xs"
+                                  className="inline-flex items-center gap-1.5 pl-1 pr-2.5 py-0.5 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200/90 text-slate-800 transition-colors shadow-xs"
                                   title={`Assigned to ${task.assigned_to}`}
                                 >
-                                  {task.assigned_to.slice(0, 2).toUpperCase()}
+                                  <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0 shadow-xs">
+                                    {task.assigned_to.slice(0, 2).toUpperCase()}
+                                  </div>
+                                  <span className="text-xs font-semibold text-slate-700 truncate max-w-[110px]">
+                                    {task.assigned_to}
+                                  </span>
                                 </div>
                               ) : (
                                 <span className="text-xs text-slate-400 font-medium italic">Unassigned</span>
@@ -582,7 +587,7 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
                       {/* Key */}
                       <td className="px-3.5 py-3.5 whitespace-nowrap font-mono font-bold text-xs sm:text-sm">
                         <div className="flex items-center gap-2">
-                          <span className="w-4.5 h-4.5 rounded bg-blue-600 text-white flex items-center justify-center p-0.5 flex-shrink-0 shadow-2xs">
+                          <span className="w-5 h-5 rounded bg-blue-600 text-white flex items-center justify-center p-0.5 flex-shrink-0 shadow-sm">
                             <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                             </svg>
@@ -691,10 +696,10 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
                       <td className="px-3.5 py-3.5 whitespace-nowrap text-slate-700">
                         {t.assigned_to ? (
                           <div className="flex items-center gap-2">
-                            <div className="w-6.5 h-6.5 rounded-full bg-slate-800 text-white text-xs font-bold flex items-center justify-center shadow-2xs">
+                            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 text-white text-xs font-bold flex items-center justify-center shrink-0 shadow-xs">
                               {t.assigned_to.slice(0, 2).toUpperCase()}
                             </div>
-                            <span className="font-semibold text-sm text-slate-800 truncate max-w-[120px]">{t.assigned_to}</span>
+                            <span className="font-semibold text-sm text-slate-800">{t.assigned_to}</span>
                           </div>
                         ) : (
                           <span className="text-slate-400 italic text-sm">Unassigned</span>
