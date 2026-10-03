@@ -26,22 +26,22 @@ export const MilestonesView: React.FC<MilestonesViewProps> = ({
     switch (status) {
       case "active":
         return (
-          <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
+          <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
             Active
           </span>
         );
       case "completed":
         return (
-          <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+          <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-600" />
             Completed
           </span>
         );
       case "upcoming":
         return (
-          <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+          <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-amber-500" />
             Upcoming
           </span>
         );
@@ -187,25 +187,25 @@ export const MilestonesView: React.FC<MilestonesViewProps> = ({
                 {/* Tasks inside this milestone */}
                 {milestoneTasks.length > 0 && (
                   <div className="pt-2">
-                    <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-2">
                       Linked Tasks:
                     </span>
                     <div className="flex flex-wrap gap-2">
                       {milestoneTasks.map((t) => (
                         <span
                           key={t.id}
-                          className={`text-xs px-2.5 py-1 rounded-lg border font-medium flex items-center gap-1.5 ${
+                          className={`text-sm px-3 py-1.5 rounded-lg border font-medium flex items-center gap-2 ${
                             t.status === "completed"
                               ? "bg-emerald-50 text-emerald-700 border-emerald-200 line-through"
                               : "bg-slate-50 text-slate-700 border-slate-200"
                           }`}
                         >
                           {t.status === "completed" ? (
-                            <svg className="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                             </svg>
                           ) : (
-                            <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
+                            <span className="w-2 h-2 rounded-full bg-slate-400" />
                           )}
                           <span>{t.title}</span>
                         </span>

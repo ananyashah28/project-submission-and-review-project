@@ -31,10 +31,29 @@ function DashboardContent() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [statsData, projectsData] = await Promise.all([
-          projectService.getProjectStats(),
-          projectService.getProjects({}),
-        ]);
+        let statsData: ProjectStats | null = null;
+        let projectsData: Project[] = [];
+
+        try {
+          const res = await Promise.all([
+            projectService.getProjectStats(),
+            projectService.getProjects({}),
+          ]);
+          statsData = res[0];
+          projectsData = res[1];
+        } catch {
+          // Fallback: If stats endpoint has issues, compute stats from projects list
+          projectsData = await projectService.getProjects({});
+          statsData = {
+            total: projectsData.length,
+            draft: projectsData.filter((p) => p.status === "draft").length,
+            submitted: projectsData.filter((p) => p.status === "submitted").length,
+            under_review: projectsData.filter((p) => p.status === "under_review").length,
+            approved: projectsData.filter((p) => p.status === "approved").length,
+            changes_requested: projectsData.filter((p) => p.status === "changes_requested").length,
+          };
+        }
+
         setStats(statsData);
         setAllProjects(projectsData);
       } catch (err: any) {

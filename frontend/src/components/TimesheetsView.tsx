@@ -115,50 +115,50 @@ export const TimesheetsView: React.FC<TimesheetsViewProps> = ({
       {/* Table of logs */}
       <div className="bg-white rounded-xl shadow-2xs border border-slate-200 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-slate-200 text-left text-xs">
-            <thead className="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider text-[10px]">
+          <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
+            <thead className="bg-slate-50 text-slate-600 font-bold uppercase tracking-wider text-xs">
               <tr>
-                <th className="px-4 py-3">Date</th>
-                <th className="px-3 py-3">Member</th>
-                <th className="px-3 py-3">Linked Work Item</th>
-                <th className="px-3 py-3">Description</th>
-                <th className="px-3 py-3">Type</th>
-                <th className="px-3 py-3 text-right">Hours</th>
-                <th className="px-4 py-3 text-right">Actions</th>
+                <th className="px-4 py-3.5">Date</th>
+                <th className="px-3.5 py-3.5">Member</th>
+                <th className="px-3.5 py-3.5">Linked Work Item</th>
+                <th className="px-3.5 py-3.5">Description</th>
+                <th className="px-3.5 py-3.5">Type</th>
+                <th className="px-3.5 py-3.5 text-right">Hours</th>
+                <th className="px-4 py-3.5 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {filteredLogs.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-12 text-center text-xs text-slate-400 italic">
+                  <td colSpan={7} className="px-4 py-16 text-center text-sm text-slate-400 italic">
                     No time entries found. Click &quot;Log Work Time&quot; to record hours.
                   </td>
                 </tr>
               ) : (
                 filteredLogs.map((log) => (
                   <tr key={log.id} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="px-4 py-3 font-medium text-slate-900 whitespace-nowrap">
+                    <td className="px-4 py-3.5 font-semibold text-slate-900 whitespace-nowrap">
                       {new Date(log.date).toLocaleDateString()}
                     </td>
-                    <td className="px-3 py-3 text-xs text-slate-700 whitespace-nowrap">
-                      <div className="flex items-center gap-1.5">
-                        <div className="w-5 h-5 rounded-full bg-slate-800 text-white text-[9px] font-bold flex items-center justify-center">
+                    <td className="px-3.5 py-3.5 text-sm text-slate-700 whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        <div className="w-6.5 h-6.5 rounded-full bg-slate-800 text-white text-xs font-bold flex items-center justify-center shadow-2xs">
                           {log.user_name ? log.user_name.slice(0, 2).toUpperCase() : "US"}
                         </div>
-                        <span>{log.user_name}</span>
+                        <span className="font-semibold text-slate-800">{log.user_name}</span>
                       </div>
                     </td>
-                    <td className="px-3 py-3 text-xs max-w-xs truncate">
+                    <td className="px-3.5 py-3.5 text-sm max-w-xs truncate">
                       {log.task_title ? (
-                        <span className="inline-flex items-center gap-1.5 font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
-                          <svg className="w-3 h-3 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <span className="inline-flex items-center gap-1.5 font-semibold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-100 text-xs shadow-2xs">
+                          <svg className="w-3.5 h-3.5 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                           </svg>
                           <span className="truncate">{log.task_title}</span>
                         </span>
                       ) : log.bug_title ? (
-                        <span className="inline-flex items-center gap-1.5 font-semibold text-red-700 bg-red-50 px-2 py-0.5 rounded-md border border-red-100">
-                          <svg className="w-3 h-3 text-red-600 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <span className="inline-flex items-center gap-1.5 font-semibold text-red-700 bg-red-50 px-2.5 py-1 rounded-md border border-red-100 text-xs shadow-2xs">
+                          <svg className="w-3.5 h-3.5 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-4m0 0H4m14-4a5 5 0 00-10 0v4a5 5 0 0010 0v-4zm-8-5l-2-2m10 2l2-2" />
                           </svg>
                           <span className="truncate">{log.bug_title}</span>
@@ -167,21 +167,21 @@ export const TimesheetsView: React.FC<TimesheetsViewProps> = ({
                         <span className="text-slate-400 italic">General Project</span>
                       )}
                     </td>
-                    <td className="px-3 py-3 text-xs text-slate-600 max-w-sm truncate">
+                    <td className="px-3.5 py-3.5 text-sm text-slate-600 max-w-sm truncate">
                       {log.description || "—"}
                     </td>
-                    <td className="px-3 py-3 whitespace-nowrap">
+                    <td className="px-3.5 py-3.5 whitespace-nowrap">
                       {log.is_billable ? (
-                        <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+                        <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
                           Billable
                         </span>
                       ) : (
-                        <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                        <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
                           Non-billable
                         </span>
                       )}
                     </td>
-                    <td className="px-3 py-3 text-right font-bold text-slate-900 whitespace-nowrap">
+                    <td className="px-3.5 py-3.5 text-right font-bold text-base text-slate-900 whitespace-nowrap">
                       {log.hours.toFixed(1)} h
                     </td>
                     <td className="px-4 py-3 text-right whitespace-nowrap">
