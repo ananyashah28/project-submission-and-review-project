@@ -173,6 +173,42 @@ class Project(Base):
         back_populates="project",
         cascade="all, delete-orphan"
     )
+    tasks = relationship(
+        "Task",
+        back_populates="project",
+        cascade="all, delete-orphan",
+        order_by="Task.created_at.desc()"
+    )
+    bugs = relationship(
+        "Bug",
+        back_populates="project",
+        cascade="all, delete-orphan",
+        order_by="Bug.created_at.desc()"
+    )
+    milestones = relationship(
+        "Milestone",
+        back_populates="project",
+        cascade="all, delete-orphan",
+        order_by="Milestone.created_at.desc()"
+    )
+    time_logs = relationship(
+        "TimeLog",
+        back_populates="project",
+        cascade="all, delete-orphan",
+        order_by="TimeLog.date.desc()"
+    )
+    activity_logs = relationship(
+        "ActivityLog",
+        back_populates="project",
+        cascade="all, delete-orphan",
+        order_by="ActivityLog.created_at.desc()"
+    )
+    members = relationship(
+        "ProjectMember",
+        back_populates="project",
+        cascade="all, delete-orphan",
+        order_by="ProjectMember.joined_at.asc()"
+    )
 
     def __repr__(self):
         return f"<Project(id={self.id}, title={self.title}, status={self.status})>"
