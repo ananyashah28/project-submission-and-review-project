@@ -110,12 +110,21 @@ class ProjectService:
             )
         
         if project.user_id != user.id:
-            from app.models.project_member import ProjectMember
-            is_member = db.query(ProjectMember).filter(
-                ProjectMember.project_id == project_id,
-                ProjectMember.user_id == user.id
-            ).first()
-            if not is_member:
+            try:
+                from app.models.project_member import ProjectMember
+                is_member = db.query(ProjectMember).filter(
+                    ProjectMember.project_id == project_id,
+                    ProjectMember.user_id == user.id
+                ).first()
+                if not is_member:
+                    raise HTTPException(
+                        status_code=status.HTTP_403_FORBIDDEN,
+                        detail="You don't have permission to access this project"
+                    )
+            except HTTPException:
+                raise
+            except Exception:
+                db.rollback()
                 raise HTTPException(
                     status_code=status.HTTP_403_FORBIDDEN,
                     detail="You don't have permission to access this project"
@@ -144,22 +153,28 @@ class ProjectService:
         Returns:
             List of projects
         """
-        from app.models.project_member import ProjectMember
-        from sqlalchemy import or_
+        try:
+            from app.models.project_member import ProjectMember
+            from sqlalchemy import or_
 
-        member_pids = db.query(ProjectMember.project_id).filter(ProjectMember.user_id == user.id)
+            member_pids = db.query(ProjectMember.project_id).filter(ProjectMember.user_id == user.id)
 
-        query = db.query(Project).filter(
-            or_(
-                Project.user_id == user.id,
-                Project.id.in_(member_pids)
+            query = db.query(Project).filter(
+                or_(
+                    Project.user_id == user.id,
+                    Project.id.in_(member_pids)
+                )
             )
-        )
-        
-        if status_filter:
-            query = query.filter(Project.status == status_filter.value)
-        
-        return query.order_by(Project.created_at.desc()).offset(skip).limit(limit).all()
+            if status_filter:
+                query = query.filter(Project.status == status_filter.value)
+            
+            return query.order_by(Project.created_at.desc()).offset(skip).limit(limit).all()
+        except Exception:
+            db.rollback()
+            query = db.query(Project).filter(Project.user_id == user.id)
+            if status_filter:
+                query = query.filter(Project.status == status_filter.value)
+            return query.order_by(Project.created_at.desc()).offset(skip).limit(limit).all()
 
     @staticmethod
     def count_user_projects(
@@ -178,22 +193,28 @@ class ProjectService:
         Returns:
             Number of projects
         """
-        from app.models.project_member import ProjectMember
-        from sqlalchemy import or_
+        try:
+            from app.models.project_member import ProjectMember
+            from sqlalchemy import or_
 
-        member_pids = db.query(ProjectMember.project_id).filter(ProjectMember.user_id == user.id)
+            member_pids = db.query(ProjectMember.project_id).filter(ProjectMember.user_id == user.id)
 
-        query = db.query(Project).filter(
-            or_(
-                Project.user_id == user.id,
-                Project.id.in_(member_pids)
+            query = db.query(Project).filter(
+                or_(
+                    Project.user_id == user.id,
+                    Project.id.in_(member_pids)
+                )
             )
-        )
-        
-        if status_filter:
-            query = query.filter(Project.status == status_filter.value)
-        
-        return query.count()
+            if status_filter:
+                query = query.filter(Project.status == status_filter.value)
+            
+            return query.count()
+        except Exception:
+            db.rollback()
+            query = db.query(Project).filter(Project.user_id == user.id)
+            if status_filter:
+                query = query.filter(Project.status == status_filter.value)
+            return query.count()
 
     @staticmethod
     def get_user_project_stats(db: Session, user: User) -> dict:

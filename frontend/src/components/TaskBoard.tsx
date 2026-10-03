@@ -99,38 +99,38 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
     switch (priority) {
       case "urgent":
         return (
-          <span title="Urgent Priority" className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-bold bg-red-50 text-red-700 border border-red-200">
+          <span title="Urgent Priority" className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold bg-red-50 text-red-700 border border-red-200 shadow-2xs">
             <svg className="w-3.5 h-3.5 text-red-600" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 4l-7 7h4v9h6v-9h4l-7-7z" />
             </svg>
-            <span className="uppercase text-[11px] tracking-wider">Urgent</span>
+            <span className="uppercase text-xs tracking-wider">Urgent</span>
           </span>
         );
       case "high":
         return (
-          <span title="High Priority" className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-bold bg-orange-50 text-orange-700 border border-orange-200">
+          <span title="High Priority" className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold bg-orange-50 text-orange-700 border border-orange-200 shadow-2xs">
             <svg className="w-3.5 h-3.5 text-orange-600" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 4l-7 7h4v9h6v-9h4l-7-7z" />
             </svg>
-            <span className="uppercase text-[11px] tracking-wider">High</span>
+            <span className="uppercase text-xs tracking-wider">High</span>
           </span>
         );
       case "medium":
         return (
-          <span title="Medium Priority" className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+          <span title="Medium Priority" className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200 shadow-2xs">
             <svg className="w-3.5 h-3.5 text-amber-600" viewBox="0 0 24 24" fill="currentColor">
               <path d="M4 10h16v4H4z" />
             </svg>
-            <span className="uppercase text-[11px] tracking-wider">Med</span>
+            <span className="uppercase text-xs tracking-wider">Med</span>
           </span>
         );
       case "low":
         return (
-          <span title="Low Priority" className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+          <span title="Low Priority" className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200 shadow-2xs">
             <svg className="w-3.5 h-3.5 text-slate-500" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 20l7-7h-4V4h-6v9H5l7 7z" />
             </svg>
-            <span className="uppercase text-[11px] tracking-wider">Low</span>
+            <span className="uppercase text-xs tracking-wider">Low</span>
           </span>
         );
     }
@@ -327,13 +327,13 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
             </button>
             <button
               onClick={() => setViewMode("list")}
-              className={`flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded-md transition-all ${
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 text-sm font-bold rounded-md transition-all ${
                 viewMode === "list"
                   ? "bg-white text-blue-600 shadow-xs"
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z" />
               </svg>
               <span>List</span>
@@ -342,9 +342,9 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
 
           <button
             onClick={() => onOpenCreateModal()}
-            className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg shadow-xs transition-colors flex items-center gap-1.5"
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg shadow-xs transition-colors flex items-center gap-1.5"
           >
-            <span>+</span>
+            <span className="text-base font-bold">+</span>
             <span>New Task</span>
           </button>
         </div>
@@ -367,15 +367,15 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
                 onDrop={(e) => handleDrop(e, col.id)}
                 className={`rounded-xl border transition-all duration-150 flex flex-col min-h-[520px] ${col.border} ${
                   isHovered ? "bg-blue-50/80 ring-2 ring-blue-400 border-blue-400" : col.bg
-                } p-2.5`}
+                } p-3`}
               >
                 {/* Column Header */}
-                <div className="flex items-center justify-between px-2 py-2 mb-2 border-b border-slate-200/60 pb-2">
+                <div className="flex items-center justify-between px-2 py-2 mb-2.5 border-b border-slate-200/60 pb-2.5">
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-xs tracking-wider text-slate-700 uppercase">
+                    <span className="font-extrabold text-sm tracking-wider text-slate-800 uppercase">
                       {col.label}
                     </span>
-                    <span className="text-[11px] font-bold px-2 py-0.2 rounded-full bg-white text-slate-700 border border-slate-200 shadow-2xs">
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-white text-slate-700 border border-slate-200 shadow-2xs">
                       {colTasks.length}
                     </span>
                   </div>
@@ -383,7 +383,7 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
                   {/* Inline quick-create task button */}
                   <button
                     onClick={() => onOpenCreateModal(col.id)}
-                    className="w-6 h-6 rounded-md hover:bg-white text-slate-400 hover:text-slate-800 flex items-center justify-center transition-colors text-sm font-bold"
+                    className="w-7 h-7 rounded-md hover:bg-white text-slate-400 hover:text-slate-800 flex items-center justify-center transition-colors text-base font-bold"
                     title={`Add task to ${col.label}`}
                   >
                     +
@@ -391,13 +391,13 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
                 </div>
 
                 {/* Column Task Cards */}
-                <div className="space-y-2.5 flex-1 overflow-y-auto max-h-[calc(100vh-280px)] pr-0.5">
+                <div className="space-y-3 flex-1 overflow-y-auto max-h-[calc(100vh-280px)] pr-0.5">
                   {colTasks.length === 0 ? (
-                    <div className="text-center py-12 text-xs text-slate-400 border-2 border-dashed border-slate-200/80 rounded-lg m-1">
+                    <div className="text-center py-12 text-sm text-slate-400 border-2 border-dashed border-slate-200/80 rounded-lg m-1">
                       <p className="font-medium">No tasks</p>
                       <button
                         onClick={() => onOpenCreateModal(col.id)}
-                        className="mt-1 text-[11px] text-blue-600 hover:underline"
+                        className="mt-1 text-xs text-blue-600 hover:underline font-semibold"
                       >
                         + Create a task
                       </button>
@@ -412,18 +412,18 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
                           draggable
                           onDragStart={(e) => handleDragStart(e, task.id)}
                           onClick={() => onOpenTaskDetail(task.id)}
-                          className="bg-white rounded-lg p-3 border border-slate-200 shadow-2xs hover:shadow-md hover:border-blue-400 transition-all cursor-pointer group relative"
+                          className="bg-white rounded-xl p-3.5 border border-slate-200 shadow-2xs hover:shadow-md hover:border-blue-400 transition-all cursor-pointer group relative"
                         >
                           {/* Top: Issue Type & Monospace Key + Priority */}
-                          <div className="flex items-center justify-between gap-1 mb-1.5">
-                            <div className="flex items-center gap-1.5">
+                          <div className="flex items-center justify-between gap-1 mb-2">
+                            <div className="flex items-center gap-2">
                               {/* Blue Task checkbox icon (Jira style) */}
-                              <span className="w-3.5 h-3.5 rounded bg-blue-600 text-white flex items-center justify-center p-0.5">
+                              <span className="w-4 h-4 rounded bg-blue-600 text-white flex items-center justify-center p-0.5 shadow-2xs">
                                 <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                                 </svg>
                               </span>
-                              <span className="text-[11px] font-mono font-bold text-slate-500 group-hover:text-blue-600 transition-colors">
+                              <span className="text-xs font-mono font-bold text-slate-500 group-hover:text-blue-600 transition-colors">
                                 {shortKey}
                               </span>
                             </div>
@@ -434,32 +434,32 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
                           </div>
 
                           {/* Title */}
-                          <h4 className="font-semibold text-xs text-slate-900 leading-snug line-clamp-2 mb-2 group-hover:text-blue-700 transition-colors">
+                          <h4 className="font-bold text-sm sm:text-base text-slate-900 leading-snug line-clamp-2 mb-2.5 group-hover:text-blue-700 transition-colors">
                             {task.title}
                           </h4>
 
                           {/* Milestone tag */}
                           {task.milestone_title && (
-                            <div className="mb-2">
-                              <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 border border-purple-200">
-                                <svg className="w-3 h-3 text-purple-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <div className="mb-2.5">
+                              <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-0.5 rounded-md bg-purple-50 text-purple-700 border border-purple-200">
+                                <svg className="w-3.5 h-3.5 text-purple-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
                                 </svg>
-                                <span className="truncate max-w-[140px]">{task.milestone_title}</span>
+                                <span className="truncate max-w-[150px]">{task.milestone_title}</span>
                               </span>
                             </div>
                           )}
 
                           {/* Bottom Row: Subtasks progress, Bugs alert, Due Date/Time, Assignee */}
-                          <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
+                          <div className="flex items-center justify-between pt-2.5 border-t border-slate-100 text-xs">
                             <div className="flex items-center gap-2 flex-wrap">
                               {/* Allocated Due Date & Time */}
                               {task.due_date && (
                                 <span
-                                  className="text-[10px] font-semibold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200 flex items-center gap-1"
+                                  className="text-xs font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200 flex items-center gap-1 shadow-2xs"
                                   title={`Allocated Deadline: ${new Date(task.due_date).toLocaleString()}`}
                                 >
-                                  <svg className="w-3 h-3 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                  <svg className="w-3.5 h-3.5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                   </svg>
                                   <span>
@@ -472,10 +472,10 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
                               {/* Subtasks checklist count */}
                               {task.subtasks_count > 0 && (
                                 <span
-                                  className="text-[10px] font-semibold text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded flex items-center gap-1"
+                                  className="text-xs font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md flex items-center gap-1"
                                   title={`Subtasks: ${task.subtasks_completed_count}/${task.subtasks_count}`}
                                 >
-                                  <svg className="w-3 h-3 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                  <svg className="w-3.5 h-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                   </svg>
                                   <span>
@@ -487,10 +487,10 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
                               {/* Bugs count */}
                               {task.bugs_count > 0 && (
                                 <span
-                                  className="text-[10px] font-bold text-red-700 bg-red-50 px-1.5 py-0.5 rounded border border-red-200 flex items-center gap-1"
+                                  className="text-xs font-bold text-red-700 bg-red-50 px-2 py-0.5 rounded-md border border-red-200 flex items-center gap-1"
                                   title={`${task.bugs_count} bug(s) linked`}
                                 >
-                                  <svg className="w-3 h-3 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                  <svg className="w-3.5 h-3.5 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-4m0 0H4m14-4a5 5 0 00-10 0v4a5 5 0 0010 0v-4zm-8-5l-2-2m10 2l2-2" />
                                   </svg>
                                   <span>{task.bugs_count}</span>
@@ -499,16 +499,16 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
                             </div>
 
                             {/* Assignee Avatar */}
-                            <div className="flex items-center gap-1">
+                            <div className="flex items-center gap-1.5">
                               {task.assigned_to ? (
                                 <div
-                                  className="w-5 h-5 rounded-full bg-slate-800 text-white text-[9px] font-bold flex items-center justify-center border border-white shadow-2xs"
+                                  className="w-6.5 h-6.5 rounded-full bg-slate-800 text-white text-xs font-bold flex items-center justify-center border border-white shadow-2xs"
                                   title={`Assigned to ${task.assigned_to}`}
                                 >
                                   {task.assigned_to.slice(0, 2).toUpperCase()}
                                 </div>
                               ) : (
-                                <span className="text-[10px] text-slate-300 italic">Unassigned</span>
+                                <span className="text-xs text-slate-400 font-medium italic">Unassigned</span>
                               )}
                             </div>
                           </div>
@@ -536,19 +536,19 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
         /* ========================================================================= */
         <div className="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50/90 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px]">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-slate-50/90 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-xs">
                 <tr>
-                  <th className="px-3.5 py-3 w-28">Key</th>
-                  <th className="px-3 py-3 min-w-[160px]">Summary</th>
-                  <th className="px-3 py-3 w-32">Status</th>
-                  <th className="px-3 py-3 w-24">Priority</th>
-                  <th className="px-3 py-3 w-44">Due Date & Time</th>
-                  <th className="px-2 py-3 w-20 text-center">Subtasks</th>
-                  <th className="px-2 py-3 w-16 text-center">Bugs</th>
-                  <th className="px-2.5 py-3 w-28">Milestone</th>
-                  <th className="px-3 py-3 w-36">Assignee</th>
-                  <th className="px-3 py-3 w-24 text-right pr-4">Actions</th>
+                  <th className="px-3.5 py-3.5 w-28">Key</th>
+                  <th className="px-3.5 py-3.5 min-w-[170px]">Summary</th>
+                  <th className="px-3.5 py-3.5 w-36">Status</th>
+                  <th className="px-3 py-3.5 w-28">Priority</th>
+                  <th className="px-3.5 py-3.5 w-48">Due Date & Time</th>
+                  <th className="px-2 py-3.5 w-24 text-center">Subtasks</th>
+                  <th className="px-2 py-3.5 w-20 text-center">Bugs</th>
+                  <th className="px-3 py-3.5 w-32">Milestone</th>
+                  <th className="px-3.5 py-3.5 w-40">Assignee</th>
+                  <th className="px-3.5 py-3.5 w-28 text-right pr-4">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -561,11 +561,11 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                           </svg>
                         </div>
-                        <p className="font-semibold text-sm text-slate-600">No tasks match your filter</p>
-                        <p className="text-xs text-slate-400">Try adjusting your search criteria or create a new task</p>
+                        <p className="font-semibold text-base text-slate-700">No tasks match your filter</p>
+                        <p className="text-sm text-slate-400">Try adjusting your search criteria or create a new task</p>
                         <button
                           onClick={() => onOpenCreateModal()}
-                          className="mt-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow-xs transition-colors"
+                          className="mt-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-xs transition-colors"
                         >
                           + Create Task
                         </button>
@@ -580,10 +580,10 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
                       className="hover:bg-slate-50/80 transition-colors cursor-pointer group"
                     >
                       {/* Key */}
-                      <td className="px-3.5 py-3 whitespace-nowrap font-mono font-bold text-xs">
+                      <td className="px-3.5 py-3.5 whitespace-nowrap font-mono font-bold text-xs sm:text-sm">
                         <div className="flex items-center gap-2">
-                          <span className="w-4 h-4 rounded bg-blue-600 text-white flex items-center justify-center p-0.5 flex-shrink-0 shadow-2xs">
-                            <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                          <span className="w-4.5 h-4.5 rounded bg-blue-600 text-white flex items-center justify-center p-0.5 flex-shrink-0 shadow-2xs">
+                            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                             </svg>
                           </span>
@@ -594,140 +594,140 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({
                       </td>
 
                       {/* Summary */}
-                      <td className="px-3 py-3 max-w-[220px]">
-                        <span className="font-semibold text-sm text-slate-900 group-hover:text-blue-600 transition-colors block truncate">
+                      <td className="px-3.5 py-3.5 max-w-[240px]">
+                        <span className="font-bold text-sm sm:text-base text-slate-900 group-hover:text-blue-600 transition-colors block truncate">
                           {t.title}
                         </span>
                       </td>
 
                       {/* Status */}
-                      <td className="px-3 py-3 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
+                      <td className="px-3.5 py-3.5 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
                         <div className="relative inline-block">
                           <select
                             value={t.status}
                             onChange={(e) => onStatusChange(t.id, e.target.value as TaskStatus)}
-                            className={`appearance-none text-xs font-bold uppercase tracking-wider py-1 pl-2.5 pr-6 rounded-full border cursor-pointer transition-colors outline-none focus:ring-2 focus:ring-blue-500/20 shadow-2xs ${getStatusBadgeStyle(t.status)}`}
+                            className={`appearance-none text-xs font-bold uppercase tracking-wider py-1.5 pl-3 pr-7 rounded-full border cursor-pointer transition-colors outline-none focus:ring-2 focus:ring-blue-500/20 shadow-2xs ${getStatusBadgeStyle(t.status)}`}
                           >
                             <option value="todo">To Do</option>
                             <option value="in_progress">In Progress</option>
                             <option value="in_review">In Review</option>
                             <option value="completed">Done</option>
                           </select>
-                          <svg className="w-3 h-3 text-current pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-3.5 h-3.5 text-current pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
                           </svg>
                         </div>
                       </td>
 
                       {/* Priority */}
-                      <td className="px-3 py-3 whitespace-nowrap">
+                      <td className="px-3 py-3.5 whitespace-nowrap">
                         {getPriorityBadge(t.priority)}
                       </td>
 
                       {/* Due Date & Time Allocation */}
-                      <td className="px-3 py-3 whitespace-nowrap">
+                      <td className="px-3.5 py-3.5 whitespace-nowrap">
                         {t.due_date ? (
-                          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-blue-50 text-blue-700 border border-blue-200 text-[11px] font-semibold shadow-2xs">
-                            <svg className="w-3 h-3 text-blue-600 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 border border-blue-200 text-xs font-semibold shadow-2xs">
+                            <svg className="w-3.5 h-3.5 text-blue-600 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                             <span>{new Date(t.due_date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
                             <span className="text-blue-300 font-bold">•</span>
-                            <svg className="w-3 h-3 text-blue-500 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <svg className="w-3.5 h-3.5 text-blue-500 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <span className="font-mono text-[11px] font-bold">
+                            <span className="font-mono text-xs font-bold">
                               {new Date(t.due_date).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}
                             </span>
                           </div>
                         ) : (
-                          <span className="text-slate-300 font-medium text-xs">—</span>
+                          <span className="text-slate-300 font-medium text-sm">—</span>
                         )}
                       </td>
 
                       {/* Subtasks */}
-                      <td className="px-2 py-3 whitespace-nowrap text-center">
+                      <td className="px-2 py-3.5 whitespace-nowrap text-center">
                         {t.subtasks_count > 0 ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
-                            <svg className="w-2.5 h-2.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                            <svg className="w-3 h-3 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             <span>{t.subtasks_completed_count}/{t.subtasks_count}</span>
                           </span>
                         ) : (
-                          <span className="text-slate-300 font-medium text-xs">—</span>
+                          <span className="text-slate-300 font-medium text-sm">—</span>
                         )}
                       </td>
 
                       {/* Bugs */}
-                      <td className="px-2 py-3 whitespace-nowrap text-center">
+                      <td className="px-2 py-3.5 whitespace-nowrap text-center">
                         {t.bugs_count > 0 ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-red-50 text-red-700 border border-red-200">
-                            <svg className="w-2.5 h-2.5 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-red-50 text-red-700 border border-red-200">
+                            <svg className="w-3 h-3 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-4m0 0H4m14-4a5 5 0 00-10 0v4a5 5 0 0010 0v-4zm-8-5l-2-2m10 2l2-2" />
                             </svg>
                             <span>{t.bugs_count}</span>
                           </span>
                         ) : (
-                          <span className="text-slate-300 font-medium text-xs">—</span>
+                          <span className="text-slate-300 font-medium text-sm">—</span>
                         )}
                       </td>
 
                       {/* Milestone */}
-                      <td className="px-2.5 py-3 whitespace-nowrap">
+                      <td className="px-3 py-3.5 whitespace-nowrap">
                         {t.milestone_title ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 border border-purple-200 text-[11px] font-semibold">
-                            <svg className="w-2.5 h-2.5 text-purple-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-purple-50 text-purple-700 border border-purple-200 text-xs font-semibold">
+                            <svg className="w-3 h-3 text-purple-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
                             </svg>
-                            <span className="truncate max-w-[100px]">{t.milestone_title}</span>
+                            <span className="truncate max-w-[120px]">{t.milestone_title}</span>
                           </span>
                         ) : (
-                          <span className="text-slate-300 font-medium text-xs">—</span>
+                          <span className="text-slate-300 font-medium text-sm">—</span>
                         )}
                       </td>
 
                       {/* Assignee */}
-                      <td className="px-3 py-3 whitespace-nowrap text-slate-700">
+                      <td className="px-3.5 py-3.5 whitespace-nowrap text-slate-700">
                         {t.assigned_to ? (
-                          <div className="flex items-center gap-1.5">
-                            <div className="w-5 h-5 rounded-full bg-slate-800 text-white text-[9px] font-bold flex items-center justify-center shadow-2xs">
+                          <div className="flex items-center gap-2">
+                            <div className="w-6.5 h-6.5 rounded-full bg-slate-800 text-white text-xs font-bold flex items-center justify-center shadow-2xs">
                               {t.assigned_to.slice(0, 2).toUpperCase()}
                             </div>
-                            <span className="font-semibold text-xs text-slate-800 truncate max-w-[110px]">{t.assigned_to}</span>
+                            <span className="font-semibold text-sm text-slate-800 truncate max-w-[120px]">{t.assigned_to}</span>
                           </div>
                         ) : (
-                          <span className="text-slate-400 italic text-xs">Unassigned</span>
+                          <span className="text-slate-400 italic text-sm">Unassigned</span>
                         )}
                       </td>
 
                       {/* Actions */}
-                      <td className="px-3 py-3 text-right whitespace-nowrap pr-4" onClick={(e) => e.stopPropagation()}>
-                        <div className="flex items-center justify-end gap-0.5">
+                      <td className="px-3.5 py-3.5 text-right whitespace-nowrap pr-4" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex items-center justify-end gap-1">
                           <button
                             onClick={() => onEditTask(t)}
-                            className="p-1 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                            className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                             title="Edit Task"
                           >
-                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                             </svg>
                           </button>
                           <button
                             onClick={() => onDeleteTask(t.id)}
-                            className="p-1 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                            className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                             title="Delete Task"
                           >
-                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
                           </button>
                           <button
                             onClick={() => onOpenTaskDetail(t.id)}
-                            className="p-1 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded transition-colors"
+                            className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
                             title="View Details"
                           >
-                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                             </svg>
                           </button>

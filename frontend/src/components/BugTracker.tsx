@@ -53,26 +53,26 @@ export const BugTracker: React.FC<BugTrackerProps> = ({
     switch (severity) {
       case "critical":
         return (
-          <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-red-100 text-red-800 border border-red-200">
-            <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" />
+          <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-red-100 text-red-800 border border-red-200 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
             Critical
           </span>
         );
       case "high":
         return (
-          <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-orange-100 text-orange-800 border border-orange-200">
+          <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-orange-100 text-orange-800 border border-orange-200 shadow-2xs">
             High
           </span>
         );
       case "medium":
         return (
-          <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200">
+          <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-amber-100 text-amber-800 border border-amber-200 shadow-2xs">
             Medium
           </span>
         );
       case "low":
         return (
-          <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+          <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 border border-slate-200 shadow-2xs">
             Low
           </span>
         );
@@ -255,18 +255,18 @@ export const BugTracker: React.FC<BugTrackerProps> = ({
       {/* ========================================================================= */}
       {/* Jira/Zoho Issue Navigator Table                                           */}
       {/* ========================================================================= */}
-      <div className="bg-white rounded-lg border border-slate-200 shadow-2xs overflow-hidden">
-        <table className="w-full text-left text-xs">
-          <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[10px]">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden">
+        <table className="w-full text-left text-sm">
+          <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-xs">
             <tr>
-              <th className="px-4 py-3">Key</th>
-              <th className="px-3 py-3">Summary</th>
-              <th className="px-3 py-3">Status</th>
-              <th className="px-3 py-3">Severity</th>
-              <th className="px-3 py-3">Linked Task</th>
-              <th className="px-3 py-3">Assignee</th>
-              <th className="px-3 py-3">Reporter</th>
-              <th className="px-4 py-3 text-right">Actions</th>
+              <th className="px-4 py-3.5">Key</th>
+              <th className="px-3.5 py-3.5">Summary</th>
+              <th className="px-3.5 py-3.5">Status</th>
+              <th className="px-3.5 py-3.5">Severity</th>
+              <th className="px-3.5 py-3.5">Linked Task</th>
+              <th className="px-3.5 py-3.5">Assignee</th>
+              <th className="px-3.5 py-3.5">Reporter</th>
+              <th className="px-4 py-3.5 text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
@@ -274,13 +274,13 @@ export const BugTracker: React.FC<BugTrackerProps> = ({
               <tr>
                 <td colSpan={8} className="px-4 py-16 text-center text-slate-400 italic">
                   <div className="flex flex-col items-center justify-center">
-                    <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mb-2">
-                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mb-2">
+                      <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-4m0 0H4m14-4a5 5 0 00-10 0v4a5 5 0 0010 0v-4zm-8-5l-2-2m10 2l2-2" />
                       </svg>
                     </div>
-                    <p className="font-semibold text-slate-700">No bugs match your filter criteria.</p>
-                    <p className="text-[11px] text-slate-400 mt-0.5">Click &quot;Report Bug&quot; to log defects.</p>
+                    <p className="font-semibold text-base text-slate-700">No bugs match your filter criteria.</p>
+                    <p className="text-sm text-slate-400 mt-1">Click &quot;Report Bug&quot; to log defects.</p>
                   </div>
                 </td>
               </tr>
@@ -296,10 +296,10 @@ export const BugTracker: React.FC<BugTrackerProps> = ({
                       className="hover:bg-slate-50/80 transition-colors cursor-pointer group"
                     >
                       {/* Bug Key */}
-                      <td className="px-4 py-3.5 font-mono font-bold text-red-600 whitespace-nowrap">
-                        <div className="flex items-center gap-1.5">
+                      <td className="px-4 py-3.5 font-mono font-bold text-red-600 whitespace-nowrap text-sm">
+                        <div className="flex items-center gap-2">
                           <svg
-                            className={`w-3.5 h-3.5 text-slate-400 transition-transform ${isExpanded ? "rotate-90" : ""}`}
+                            className={`w-4 h-4 text-slate-400 transition-transform ${isExpanded ? "rotate-90" : ""}`}
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -311,23 +311,23 @@ export const BugTracker: React.FC<BugTrackerProps> = ({
                       </td>
 
                       {/* Bug Title */}
-                      <td className="px-3 py-3.5 max-w-md">
-                        <span className="font-semibold text-slate-900 group-hover:text-red-700 transition-colors line-clamp-1">
+                      <td className="px-3.5 py-3.5 max-w-md">
+                        <span className="font-bold text-slate-900 group-hover:text-red-700 transition-colors line-clamp-1 text-sm sm:text-base">
                           {bug.title}
                         </span>
                         {bug.description && !isExpanded && (
-                          <span className="text-[11px] text-slate-400 line-clamp-1 mt-0.5">
+                          <span className="text-xs text-slate-500 line-clamp-1 mt-0.5">
                             {bug.description}
                           </span>
                         )}
                       </td>
 
                       {/* Status Dropdown */}
-                      <td className="px-3 py-3.5 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
+                      <td className="px-3.5 py-3.5 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
                         <select
                           value={bug.status}
                           onChange={(e) => onStatusChange(bug.id, e.target.value as BugStatus)}
-                          className={`text-[11px] font-bold uppercase py-1 px-2.5 rounded border outline-none ${
+                          className={`text-xs font-bold uppercase tracking-wider py-1.5 px-3 rounded-lg border outline-none shadow-2xs ${
                             bug.status === "open"
                               ? "bg-red-50 text-red-700 border-red-200"
                               : bug.status === "in_progress"
@@ -345,40 +345,40 @@ export const BugTracker: React.FC<BugTrackerProps> = ({
                       </td>
 
                       {/* Severity */}
-                      <td className="px-3 py-3.5 whitespace-nowrap">
+                      <td className="px-3.5 py-3.5 whitespace-nowrap">
                         {getSeverityBadge(bug.severity)}
                       </td>
 
                       {/* Linked Task */}
-                      <td className="px-3 py-3.5 whitespace-nowrap">
+                      <td className="px-3.5 py-3.5 whitespace-nowrap">
                         {bug.task_title ? (
-                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-100 text-[11px] font-semibold max-w-[160px] truncate">
-                            <svg className="w-3 h-3 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 border border-blue-100 text-xs font-semibold max-w-[180px] truncate shadow-2xs">
+                            <svg className="w-3.5 h-3.5 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                             </svg>
                             <span className="truncate">{bug.task_title}</span>
                           </span>
                         ) : (
-                          <span className="text-slate-300 italic">—</span>
+                          <span className="text-slate-300 italic text-sm">—</span>
                         )}
                       </td>
 
                       {/* Assignee */}
-                      <td className="px-3 py-3.5 whitespace-nowrap text-slate-700">
+                      <td className="px-3.5 py-3.5 whitespace-nowrap text-slate-700">
                         {bug.assigned_to ? (
-                          <div className="flex items-center gap-1.5">
-                            <div className="w-5 h-5 rounded-full bg-slate-800 text-white text-[9px] font-bold flex items-center justify-center">
+                          <div className="flex items-center gap-2">
+                            <div className="w-6.5 h-6.5 rounded-full bg-slate-800 text-white text-xs font-bold flex items-center justify-center shadow-2xs">
                               {bug.assigned_to.slice(0, 2).toUpperCase()}
                             </div>
-                            <span className="font-semibold text-slate-800">{bug.assigned_to}</span>
+                            <span className="font-semibold text-sm text-slate-800">{bug.assigned_to}</span>
                           </div>
                         ) : (
-                          <span className="text-slate-300 italic">Unassigned</span>
+                          <span className="text-slate-400 italic text-sm">Unassigned</span>
                         )}
                       </td>
 
                       {/* Reporter */}
-                      <td className="px-3 py-3.5 whitespace-nowrap text-slate-700">
+                      <td className="px-3.5 py-3.5 whitespace-nowrap text-slate-700 text-sm font-medium">
                         {bug.reported_by || "—"}
                       </td>
 
