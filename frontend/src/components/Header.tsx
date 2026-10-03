@@ -38,7 +38,7 @@ export const Header: React.FC<HeaderProps> = ({ fluid = false, hideNavLinks = fa
   };
 
   return (
-    <header className="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-2xs">
+    <header className="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
       <div className={fluid ? "w-full px-6 lg:px-8" : "max-w-7xl mx-auto px-6 sm:px-8 lg:px-10"}>
         <div className="flex justify-between h-16">
           {/* Logo */}
@@ -98,10 +98,10 @@ export const Header: React.FC<HeaderProps> = ({ fluid = false, hideNavLinks = fa
                     {/* New Project Button */}
                     <Link
                       href="/projects/new"
-                      className="hidden sm:flex items-center space-x-2 bg-blue-600 text-white hover:bg-blue-700 px-4.5 py-2.5 rounded-xl text-base font-bold shadow-xs transition-colors"
+                      className="hidden sm:inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap shadow-sm transition-colors shrink-0"
                     >
                       <svg
-                        className="w-4.5 h-4.5"
+                        className="w-4 h-4 shrink-0"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
