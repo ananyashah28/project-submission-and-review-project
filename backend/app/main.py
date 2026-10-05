@@ -53,6 +53,23 @@ async def root():
     }
 
 
+# Startup database initialization
+@app.on_event("startup")
+def startup_db_init():
+    """
+    Ensure all models and tables exist on application startup.
+    This guarantees that newly added features (tasks, bugs, milestones, timelogs, members)
+    never crash with relation does not exist in production.
+    """
+    try:
+        from app.core.database import engine, Base
+        import app.models  # ensure all models are registered
+        Base.metadata.create_all(bind=engine)
+    except Exception as e:
+        import logging
+        logging.getLogger("uvicorn.error").warning(f"Database auto-creation warning: {e}")
+
+
 # Include API routers
 from app.api import router as api_router
 app.include_router(api_router)

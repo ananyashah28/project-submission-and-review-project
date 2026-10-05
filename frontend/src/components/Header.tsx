@@ -9,7 +9,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context";
 
-export const Header: React.FC = () => {
+interface HeaderProps {
+  fluid?: boolean;
+  hideNavLinks?: boolean;
+}
+
+export const Header: React.FC<HeaderProps> = ({ fluid = false, hideNavLinks = false }) => {
   const router = useRouter();
   const { user, isAuthenticated, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -33,13 +38,13 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+      <div className={fluid ? "w-full px-6 lg:px-8" : "max-w-7xl mx-auto px-6 sm:px-8 lg:px-10"}>
         <div className="flex justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
+            <Link href={hideNavLinks ? "/projects" : "/dashboard"} className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-xs">
                 <svg
                   className="w-5 h-5 text-white"
                   fill="none"
@@ -54,7 +59,7 @@ export const Header: React.FC = () => {
                   />
                 </svg>
               </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              <span className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
                 Project Portal
               </span>
             </Link>
@@ -63,54 +68,66 @@ export const Header: React.FC = () => {
           {/* Navigation */}
           <div className="flex items-center">
             {isAuthenticated ? (
-              <div className="flex items-center space-x-4">
-                {/* Dashboard Link */}
-                <Link
-                  href="/dashboard"
-                  className="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
-                >
-                  Dashboard
-                </Link>
+              <div className="flex items-center space-x-5">
+                {!hideNavLinks && (
+                  <>
+                    {/* Dashboard Link */}
+                    <Link
+                      href="/dashboard"
+                      className="text-slate-700 hover:text-blue-600 px-3.5 py-2 text-base font-semibold transition-colors"
+                    >
+                      Dashboard
+                    </Link>
 
-                {/* Review Link */}
-                <Link
-                  href="/review"
-                  className="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
-                >
-                  Review
-                </Link>
+                    {/* Projects Portfolio Link */}
+                    <Link
+                      href="/projects"
+                      className="text-slate-700 hover:text-blue-600 px-3.5 py-2 text-base font-semibold transition-colors"
+                    >
+                      Projects
+                    </Link>
 
-                {/* New Project Button */}
-                <Link
-                  href="/projects/new"
-                  className="hidden sm:flex items-center space-x-1.5 bg-blue-600 text-white hover:bg-blue-700 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
-                >
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
-                  <span>New Project</span>
-                </Link>
+                    {/* Review Link */}
+                    <Link
+                      href="/review"
+                      className="text-slate-700 hover:text-blue-600 px-3.5 py-2 text-base font-semibold transition-colors"
+                    >
+                      Review
+                    </Link>
+
+                    {/* New Project Button */}
+                    <Link
+                      href="/projects/new"
+                      className="hidden sm:inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap shadow-sm transition-colors shrink-0"
+                    >
+                      <svg
+                        className="w-4 h-4 shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 4v16m8-8H4"
+                        />
+                      </svg>
+                      <span>New Project</span>
+                    </Link>
+                  </>
+                )}
 
                 {/* User Menu */}
                 <div className="relative" ref={menuRef}>
                   <button
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
-                    className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 focus:outline-none group"
+                    className="flex items-center space-x-2.5 text-slate-800 hover:text-blue-600 focus:outline-none group"
                   >
-                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-semibold shadow-md group-hover:shadow-lg transition-shadow">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white text-base font-bold shadow-md group-hover:shadow-lg transition-shadow">
                       {user?.name?.charAt(0).toUpperCase() || "U"}
                     </div>
-                    <span className="hidden sm:block text-sm font-medium text-gray-700">
+                    <span className="hidden sm:block text-base font-semibold text-slate-800">
                       {user?.name}
                     </span>
                     <svg

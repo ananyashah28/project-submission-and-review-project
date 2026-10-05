@@ -117,3 +117,22 @@ async def change_password(
     db.commit()
     
     return {"message": "Password updated successfully"}
+
+
+@router.get("", response_model=list[UserResponse])
+async def list_users(
+    query: str = None,
+    limit: int = 50,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    List / search active users to collaborate with or add to project teams.
+    """
+    q = db.query(User).filter(User.is_active == True)
+    if query:
+        q = q.filter(
+            (User.name.ilike(f"%{query}%")) | (User.email.ilike(f"%{query}%"))
+        )
+    return q.limit(limit).all()
+

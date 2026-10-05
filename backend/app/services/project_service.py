@@ -49,6 +49,17 @@ class ProjectService:
         db.add(db_project)
         db.commit()
         db.refresh(db_project)
+
+        # Add project members if specified
+        if hasattr(project_data, "member_ids") and project_data.member_ids:
+            from app.models.project_member import ProjectMember
+            for mid in project_data.member_ids:
+                if mid != user.id:
+                    u_exists = db.query(User).filter(User.id == mid).first()
+                    if u_exists:
+                        db.add(ProjectMember(project_id=db_project.id, user_id=mid, role="member"))
+            db.commit()
+            db.refresh(db_project)
         
         return db_project
 
@@ -76,19 +87,19 @@ class ProjectService:
         user: User
     ) -> Project:
         """
-        Get a project and verify ownership.
+        Get a project and verify access (owner or member).
         
         Args:
             db: Database session
             project_id: Project UUID
-            user: User to verify ownership
+            user: User to verify ownership or membership
             
         Returns:
-            Project if found and owned by user
+            Project if found and user has access
             
         Raises:
             HTTPException 404: If project not found
-            HTTPException 403: If user doesn't own the project
+            HTTPException 403: If user doesn't have access
         """
         project = ProjectService.get_project_by_id(db, project_id)
         
@@ -99,10 +110,25 @@ class ProjectService:
             )
         
         if project.user_id != user.id:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="You don't have permission to access this project"
-            )
+            try:
+                from app.models.project_member import ProjectMember
+                is_member = db.query(ProjectMember).filter(
+                    ProjectMember.project_id == project_id,
+                    ProjectMember.user_id == user.id
+                ).first()
+                if not is_member:
+                    raise HTTPException(
+                        status_code=status.HTTP_403_FORBIDDEN,
+                        detail="You don't have permission to access this project"
+                    )
+            except HTTPException:
+                raise
+            except Exception:
+                db.rollback()
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="You don't have permission to access this project"
+                )
         
         return project
 
@@ -115,7 +141,7 @@ class ProjectService:
         limit: int = 100
     ) -> List[Project]:
         """
-        Get all projects for a user with optional filtering.
+        Get all projects for a user (as owner or team member) with optional filtering.
         
         Args:
             db: Database session
@@ -127,12 +153,28 @@ class ProjectService:
         Returns:
             List of projects
         """
-        query = db.query(Project).filter(Project.user_id == user.id)
-        
-        if status_filter:
-            query = query.filter(Project.status == status_filter.value)
-        
-        return query.order_by(Project.created_at.desc()).offset(skip).limit(limit).all()
+        try:
+            from app.models.project_member import ProjectMember
+            from sqlalchemy import or_
+
+            member_pids = db.query(ProjectMember.project_id).filter(ProjectMember.user_id == user.id)
+
+            query = db.query(Project).filter(
+                or_(
+                    Project.user_id == user.id,
+                    Project.id.in_(member_pids)
+                )
+            )
+            if status_filter:
+                query = query.filter(Project.status == status_filter.value)
+            
+            return query.order_by(Project.created_at.desc()).offset(skip).limit(limit).all()
+        except Exception:
+            db.rollback()
+            query = db.query(Project).filter(Project.user_id == user.id)
+            if status_filter:
+                query = query.filter(Project.status == status_filter.value)
+            return query.order_by(Project.created_at.desc()).offset(skip).limit(limit).all()
 
     @staticmethod
     def count_user_projects(
@@ -141,7 +183,7 @@ class ProjectService:
         status_filter: Optional[ProjectStatus] = None
     ) -> int:
         """
-        Count projects for a user with optional filtering.
+        Count projects for a user (as owner or member) with optional filtering.
         
         Args:
             db: Database session
@@ -151,12 +193,28 @@ class ProjectService:
         Returns:
             Number of projects
         """
-        query = db.query(Project).filter(Project.user_id == user.id)
-        
-        if status_filter:
-            query = query.filter(Project.status == status_filter.value)
-        
-        return query.count()
+        try:
+            from app.models.project_member import ProjectMember
+            from sqlalchemy import or_
+
+            member_pids = db.query(ProjectMember.project_id).filter(ProjectMember.user_id == user.id)
+
+            query = db.query(Project).filter(
+                or_(
+                    Project.user_id == user.id,
+                    Project.id.in_(member_pids)
+                )
+            )
+            if status_filter:
+                query = query.filter(Project.status == status_filter.value)
+            
+            return query.count()
+        except Exception:
+            db.rollback()
+            query = db.query(Project).filter(Project.user_id == user.id)
+            if status_filter:
+                query = query.filter(Project.status == status_filter.value)
+            return query.count()
 
     @staticmethod
     def get_user_project_stats(db: Session, user: User) -> dict:
@@ -222,10 +280,30 @@ class ProjectService:
             Updated project
         """
         update_data = project_data.model_dump(exclude_unset=True)
+        member_ids = update_data.pop("member_ids", None)
         
         for field, value in update_data.items():
             setattr(project, field, value)
         
+        # Sync project members if member_ids was explicitly provided
+        if member_ids is not None:
+            from app.models.project_member import ProjectMember
+            current_members = db.query(ProjectMember).filter(ProjectMember.project_id == project.id).all()
+            current_map = {pm.user_id: pm for pm in current_members}
+            new_ids = set(member_ids)
+
+            # Remove members not in new_ids
+            for uid, pm in current_map.items():
+                if uid not in new_ids:
+                    db.delete(pm)
+
+            # Add newly selected members (excluding owner)
+            for uid in new_ids:
+                if uid not in current_map and uid != project.user_id:
+                    u_exists = db.query(User).filter(User.id == uid).first()
+                    if u_exists:
+                        db.add(ProjectMember(project_id=project.id, user_id=uid, role="member"))
+
         db.commit()
         db.refresh(project)
         

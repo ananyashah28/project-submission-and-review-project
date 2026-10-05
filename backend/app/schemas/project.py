@@ -50,7 +50,10 @@ class ProjectCreate(ProjectBase):
     """
     Schema for creating a new project.
     """
-    pass
+    member_ids: Optional[List[UUID]] = Field(
+        default_factory=list,
+        description="IDs of users to add as project members"
+    )
 
 
 class ProjectUpdate(BaseModel):
@@ -64,6 +67,10 @@ class ProjectUpdate(BaseModel):
     technologies: Optional[List[str]] = None
     github_url: Optional[str] = Field(None, max_length=500)
     demo_url: Optional[str] = Field(None, max_length=500)
+    member_ids: Optional[List[UUID]] = Field(
+        None,
+        description="Updated list of user IDs for project members"
+    )
 
 
 class ProjectStatusUpdate(BaseModel):
@@ -140,6 +147,9 @@ class ProjectResponse(ProjectBase):
     updated_at: Optional[datetime] = None
     can_edit: bool = False
     can_submit: bool = False
+    member_ids: Optional[List[UUID]] = []
+    members_count: int = 1
+    is_owner: bool = True
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -151,10 +161,13 @@ class ProjectListResponse(BaseModel):
     """
     id: UUID
     title: str
+    description: Optional[str] = None
     category: Optional[str] = None
     status: ProjectStatus
     created_at: datetime
     updated_at: Optional[datetime] = None
+    members_count: int = 1
+    is_owner: bool = True
 
     model_config = ConfigDict(from_attributes=True)
 

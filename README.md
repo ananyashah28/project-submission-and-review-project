@@ -90,7 +90,7 @@ python -m venv venv
 # Linux/Mac:
 source venv/bin/activate
 # Windows:
-.\venv\Scripts\activate
+.\venv\Scripts\Activate.ps1
 
 # Install dependencies
 pip install -r requirements.txt

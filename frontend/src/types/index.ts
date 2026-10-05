@@ -25,3 +25,56 @@ export type {
   ApiResponse,
   HttpMethod,
 } from "./api";
+
+// Task & Subtask types
+export type {
+  Task,
+  TaskDetail,
+  TaskCreate,
+  TaskUpdate,
+  TaskStatus,
+  TaskPriority,
+  Subtask,
+  SubtaskCreate,
+  SubtaskUpdate,
+} from "./task";
+
+// Bug types
+export type {
+  Bug,
+  BugCreate,
+  BugUpdate,
+  BugSeverity,
+  BugStatus,
+} from "./bug";
+
+// Milestone types
+export type {
+  Milestone,
+  MilestoneCreate,
+  MilestoneUpdate,
+  MilestoneStatus,
+} from "./milestone";
+
+// TimeLog types
+export type {
+  TimeLog,
+  TimeLogCreate,
+  TimeLogUpdate,
+  TimeLogListResponse,
+} from "./timelog";
+
+// ActivityLog types
+export type {
+  ActivityLog,
+  ActivityLogListResponse,
+} from "./activity";
+
+// Project Member types
+export type {
+  ProjectMember,
+  ProjectRole,
+  ProjectMemberCreate,
+  ProjectMemberUpdate,
+  ProjectMemberListResponse,
+} from "./member";
