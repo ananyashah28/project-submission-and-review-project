@@ -195,7 +195,7 @@ src/
 | `lib/` | Configure tools (axios, etc.) | Base URL, interceptors |
 | `context/` | Share state across components | User auth state |
 | `utils/` | Generic helper functions | Format dates, validate emails |
-| `types/` | TypeScript interfaces | `User`, `Project` types |
+| `types/` | TypeScript interfaces.... | `User`, `Project` types |
 
 ---
 
